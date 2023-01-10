@@ -4,14 +4,13 @@ const route = require("./routes/route.js");
 const { default: mongoose } = require("mongoose");
 const app = express();
 
-mongoose.set("setQuery", true);
+mongoose.set("strictQuery", true);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 mongoose
-  .connect(
-    "mongodb+srv://vishalsharma:8423354673@vishal-db.bpwswlx.mongodb.net/group21Database",
+  .connect("mongodb+srv://vishalsharma:8423354673@vishal-db.bpwswlx.mongodb.net/project2",
     {
       useNewUrlParser: true,
     }
