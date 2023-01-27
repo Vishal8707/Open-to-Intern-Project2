@@ -9,9 +9,11 @@ let mobileRegex =
   /^(?:(?:\+|0{0,2})91(\s*|[\-])?|[0]?)?([6789]\d{2}([ -]?)\d{3}([ -]?)\d{4})$/;
 
 const createIntern = async function (req, res) {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+
   try {
     let data = req.body;
-    let { name, email, mobile } = data;
+    let { name, email, mobile, collegeName} = data;
     if (Object.keys(data).length === 0) {
       return res
         .status(400)
@@ -65,7 +67,7 @@ const createIntern = async function (req, res) {
         .send({ status: false, msg: "please enter the valid Number" });
     }
 
-    let findCollege = await collegeModel.findOne({ name: data.collegeName });
+    let findCollege = await collegeModel.findOne({ name:collegeName });
 
     if (!findCollege) {
       return res.status(400).send({ status: false, msg: "College Not found" });
@@ -82,6 +84,8 @@ const createIntern = async function (req, res) {
   }
 };
 const getCollege = async function (req, res) {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+
   try {
     let data = req.query.collegeName;
 
@@ -98,6 +102,7 @@ const getCollege = async function (req, res) {
     }
 
     let findCollege = await collegeModel.findOne({name: data,isDeleted: false,});
+    
 
     if (!findCollege) {
       return res.status(404).send({status: false,msg: "sorry no collage data found with this collegeName" });
@@ -105,7 +110,7 @@ const getCollege = async function (req, res) {
     let{name,fullName,logoLink,_id} = findCollege
 
     let internCollege = await InternModel.find({
-      collegeId: _id,
+      collegeId:_id,
       isDeleted: false,
     }).select({ name: 1, email: 1, mobile: 1 });
   
@@ -123,6 +128,7 @@ const getCollege = async function (req, res) {
     res.status(500).send({ errorType: error.name, errorMsg: error.message });
   }
 };
+
 
 module.exports.createIntern = createIntern;
 module.exports.getCollege = getCollege;
